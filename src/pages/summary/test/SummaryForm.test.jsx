@@ -1,6 +1,10 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import SummaryForm from "../SummaryForm";
-
+import userEvent from "@testing-library/user-event";
 test("Initial conditions", () => {
   render(<SummaryForm />);
   const checkbox = screen.getByRole("checkbox", {
@@ -19,9 +23,29 @@ test("Checkbox enables button on first click and disable on second click", () =>
   });
   const continueButton = screen.getByRole("button", { name: /confirm order/i });
 
-  fireEvent.click(checkbox);
+  userEvent.click(checkbox);
   expect(continueButton).toBeEnabled();
 
-  fireEvent.click(checkbox);
+  userEvent.click(checkbox);
   expect(continueButton).toBeDisabled();
+});
+
+test("Pop over response to hover", async () => {
+  render(<SummaryForm />);
+
+  const nullPopOver = screen.queryByText(
+    /no ice cream be actually be delivered/i
+  );
+  expect(nullPopOver).not.toBeInTheDocument();
+
+  const tnc = screen.getByText(/terms and conditions/i);
+  userEvent.hover(tnc);
+
+  const popOver = screen.getByText(/no ice cream be actually be delivered/i);
+  expect(popOver).toBeInTheDocument();
+
+  userEvent.unhover(tnc);
+  await waitForElementToBeRemoved(() =>
+    screen.queryByText(/no ice cream be actually be delivered/i)
+  );
 });
