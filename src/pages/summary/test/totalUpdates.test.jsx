@@ -16,10 +16,10 @@ test("update scoop subtotal when scoop changes", async () => {
   userEvent.type(vanillaInput, "1");
   expect(scoopSubTotal).toHaveTextContent("2.00");
 
-  const choclateInput = await screen.findByRole("spinbutton", {
-    name: "Choclate",
+  const chocolateInput = await screen.findByRole("spinbutton", {
+    name: "Chocolate",
   });
-  userEvent.clear(choclateInput);
-  userEvent.type(choclateInput, "2");
+  userEvent.clear(chocolateInput);
+  userEvent.type(chocolateInput, "2");
   expect(scoopSubTotal).toHaveTextContent("6.00");
 });

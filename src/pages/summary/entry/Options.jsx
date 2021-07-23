@@ -15,8 +15,12 @@ export default function Options({ optionType }) {
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
-      .then((response) => setItems(response.data))
-      .catch(setError(true));
+      .then((response) => {
+        setItems(response.data);
+      })
+      .catch((err) => {
+        setError(true);
+      });
   }, [optionType]);
 
   if (error) {
